@@ -6,3 +6,8 @@
   max-width: 340px;
   gap: var(--spacing-md);
 }
+
+.logo {
+  margin: 0 auto;
+  width: 278px;
+}

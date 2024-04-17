@@ -6,8 +6,7 @@ interface IButton extends ButtonHTMLAttributes<HTMLButtonElement> {
     variant?: ButtonVariant,
 }
 
-export function Button( {variant = ButtonVariant.Default
-    , children, ...rest }: IButton ) {
+export function Button( {variant = ButtonVariant.Default, children, ...rest }: IButton ) {
     let buttonClass = styles.buttonBase
     switch (variant) {
         case ButtonVariant.Default: 
