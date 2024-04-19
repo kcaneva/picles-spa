@@ -6,9 +6,7 @@ interface IImageBase64 extends ImgHTMLAttributes<HTMLImageElement> {
 }
 
 export function ImageBase64( { src, onError, ...rest }: IImageBase64) {
-
-  const thumb = src ? `data:image/*;base64,{$src}` : thumbDefault
-  
+  const thumb = src ? `data:image/*;base64, ${src}` : thumbDefault
   return <img 
             src={thumb}
             onError={(e) => {

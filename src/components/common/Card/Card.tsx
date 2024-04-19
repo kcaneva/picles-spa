@@ -9,8 +9,8 @@ interface ICard {
 }
 
 export function Card( {href, thumb, text }: ICard ) {
-
-    return (                                                                                        
+        
+    return (                                      
         <Link to={href} className={styles.card}>
             <ImageBase64 src={thumb}/>
             <span>{text}</span>                                                                                                                                     
