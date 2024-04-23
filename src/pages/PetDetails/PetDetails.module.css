@@ -26,7 +26,8 @@
 }
 
 .content span {
-  font-weight: var(--font-weight-medium);
+  /* font-weight: var(--font-weight-medium); */
+  font-weight: var(--font-weight-bold);
   color: var(--color-gray-400);
 }
 
@@ -38,6 +39,7 @@
 .content p,
 .content span {
   width: 100%;
+  text-align: justify;
 }
 
 .buttonWhatsapp {

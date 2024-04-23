@@ -1,0 +1,14 @@
+import { IPet } from "../../interfaces/pet";
+import httpClient from "../api/httpClient";
+
+export async function getPetById(id: string): Promise<IPet> {
+  try {
+    const response = await httpClient.get( `/pet/${id}` ) 
+
+    return response.data
+
+  } catch (error) {
+    console.log(`Erro ao buscar Pet por Id: ${id}`, error)
+    throw error
+  }
+} 

@@ -7,19 +7,20 @@ import { Pagination } from '../../components/common/Pagination';
 import { useSearchParams } from 'react-router-dom';
 import { usePetList } from '../../hooks/usePetList';
 import { Select } from '../../components/common/Select';
-import { Button } from '../../components/common/Button';
+import { Button, ButtonVariant } from '../../components/common/Button';
 import { filterColumns } from './Pets.contants';
-import { FormEvent } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
 import { GetPetsRequest } from '../../interfaces/pet';
 
 export function Pets() {
+  const [isButtonEnabled, setIsButtonEnabled] = useState(false)
   const [searchParams, setSearchParams] = useSearchParams()
 
   const ITEMS_PER_PAGE = 12
 
   const urlParams = {
     page: searchParams.get('page') ? Number(searchParams.get('page')) : 1,
-    itemsPerPage: ITEMS_PER_PAGE,
+    itemsPerPage: searchParams.get('itemsPerPage') ? Number(searchParams.get('itemsPerPage')) : ITEMS_PER_PAGE,
     type: searchParams.get('type') ?? '',
     size: searchParams.get('size') ?? '',
     gender: searchParams.get('gender') ?? '',
@@ -27,9 +28,25 @@ export function Pets() {
   
   const { data, isLoading } = usePetList(urlParams) 
 
+  function checkButtonStatus(event: ChangeEvent<HTMLFormElement>) {
+    const { type, size, gender } = getFormValue(event.target.form)
+
+    setIsButtonEnabled( type !== urlParams.type || 
+                        size !== urlParams.size || 
+                        gender !== urlParams.gender
+                      )
+  }
+
   function changePage(page: number) {
     setSearchParams( (params) => {
       params.set('page', String(page))
+      return params
+    })
+  }
+
+  function changeItemsPerPage(items: number) {
+    setSearchParams( (params) => {
+      params.set('itemsPerPage', String(items))
       return params
     })
   }
@@ -40,8 +57,10 @@ export function Pets() {
   }
 
   function updateSearchParams(urlParams: GetPetsRequest) {
-    const fields: (keyof GetPetsRequest)[] = ['type', 'size', 'gender']
+    const fields: (keyof GetPetsRequest)[] = ['type', 'size', 'gender', 'itemsPerPage']
     const newParams = new URLSearchParams()
+
+    console.log(fields)
 
     fields.forEach((field) => {
       if (urlParams[field]) {
@@ -49,7 +68,7 @@ export function Pets() {
       }
     })
     newParams.set('page', '1')
-
+    console.log(newParams)
     return newParams
   }
 
@@ -67,7 +86,10 @@ export function Pets() {
       <div className={styles.container}> 
         <Header />
 
-        <form className={styles.filters} onSubmit={applyFilters}>
+        <form className={styles.filters} 
+          onSubmit={applyFilters}
+          onChange={checkButtonStatus}
+        >
           <div className={styles.columns}>
 
             {filterColumns.map( (filter) => (
@@ -83,17 +105,24 @@ export function Pets() {
 
           </div>       
 
-          <Button type="submit">Buscar</Button>
+          <Button 
+            type="submit"
+            variant={
+              isButtonEnabled ? ButtonVariant.Default : ButtonVariant.Disabled
+            }
+          >
+            Buscar
+          </Button>
         </form>
 
 
-        {isLoading  && (<Skeleton count={ITEMS_PER_PAGE} containerClassName={styles.skeleton} />)}
+        {isLoading  && (<Skeleton count={urlParams.itemsPerPage} containerClassName={styles.skeleton} />)}
 
         <main className={styles.list}>
           {data?.items.map( (pet) => (
             <Card 
               key={pet.id} 
-              href={`/pet/${pet.id}`} 
+              href={`/pets/${pet.id}`} 
               text={pet.name} 
               thumb={pet.photo} />
           ))}         
@@ -103,7 +132,10 @@ export function Pets() {
           <Pagination 
             currentPage={data.currentPage} 
             totalPages={data.totalPages} 
-            onPageChange={(number) => changePage(number)} />
+            itemsPerPage={urlParams.itemsPerPage}
+            onPageChange={(number) => changePage(number)}
+            onItemsPerPageChange={(number) => changeItemsPerPage(number)}
+          />
         }
 
       </div>
