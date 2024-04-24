@@ -23,7 +23,7 @@ export function Button( {variant = ButtonVariant.Default, children, ...rest }: I
             break
     }
     return (
-        <button className={buttonClass} {...rest}>
+        <button className={buttonClass} type='submit' {...rest}>
             {children}
         </button>
     )
