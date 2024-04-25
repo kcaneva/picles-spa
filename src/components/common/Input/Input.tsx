@@ -3,15 +3,14 @@ import styles from './Input.module.css'
 
 interface IInput extends InputHTMLAttributes<HTMLInputElement> {
   label: string
-  name: string
 }
 
-function ForwardInput({ label, name, ...rest }: IInput, ref: Ref<HTMLInputElement>) {
+function ForwardInput({ label, ...rest }: IInput, ref: Ref<HTMLInputElement>) {
         
     return (                      
         <aside className={styles.inputGroup}>
-          <label htmlFor={name}>{label}</label>
-          <input ref={ref} {...rest} id={name} name={name} >
+          <label>{label}</label>
+          <input ref={ref} {...rest}>
           </input>
         </aside>                
     )

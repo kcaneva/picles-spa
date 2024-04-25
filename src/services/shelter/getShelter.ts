@@ -8,7 +8,7 @@ export async function getShelter(): Promise<IShelter> {
     return response.data
 
   } catch (error) {
-    console.log(`Erro ao buscar Shelter`, error)
+    console.log(`Erro ao buscar Abrigo`, error)
     throw error
   }
 } 
